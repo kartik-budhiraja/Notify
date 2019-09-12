@@ -1,11 +1,50 @@
 <!doctype html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Notify</title>
-    </head>
 
-    <body>
-        <h1>Lets take notes !!!</h1>
-    </body>
+<head>
+    <meta charset="utf-8">
+    <title>Notify</title>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <h1 style="text-align: center;margin-top: 10px">Lets take notes !!! <i class="nes-icon is-large like"></i></h1>
+   
+    <div style="margin: 5px; border: 1px black solid; min-height: 300px" id="notepad" contenteditable
+        class="nes-textarea"></div>
+    <div style="margin-bottom: 10px;">
+        <button style="float: right;margin-left: 10px;margin-right: 10px" onclick="saveFile()" type="button"
+            class="nes-btn is-primary">Save</button>
+        <button style="float: right;margin-left: 10px;margin-right: 10px" onclick="clearText()" type="button"
+            class="nes-btn is-error">Clear</button>
+    </div>
+    <script src="https://unpkg.com/filer/dist/filer.min.js"></script>
+    <script>
+        const fs = new Filer.FileSystem();
+        window.addEventListener('DOMContentLoaded', (event) => {
+            fs.readFile('/note', 'utf8', function (err, data) {
+                if (err) {
+                    document.querySelector('#notepad').innerHTML = 'Welcome to Notify, Lets take notesss!!!!!!!';
+                }
+                if (data) {
+                    document.querySelector('#notepad').innerHTML = data;
+                }
+            })
+        })
+        function saveFile() {
+            fs.writeFile('/note', document.querySelector('#notepad').innerHTML);
+
+        }
+        function clearText() {
+            console.log('Clear called');
+            document.querySelector('#notepad').innerHTML = ""
+        }
+
+        setInterval(() => { this.saveFile() }, 2000);
+
+
+    </script>
+</body>
+
 </html>

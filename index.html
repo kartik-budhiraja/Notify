@@ -20,8 +20,13 @@
             class="nes-btn is-error">Clear</button>
     </div>
     <script src="https://unpkg.com/filer/dist/filer.min.js"></script>
+    <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
     <script>
         const fs = new Filer.FileSystem();
+        hotkeys.filter = function(event) { 
+            var tagName = (event.target || event.srcElement).tagName;
+            return !(tagName.isContentEditable);
+        }
         window.addEventListener('DOMContentLoaded', (event) => {
             fs.readFile('/note', 'utf8', function (err, data) {
                 if (err) {
@@ -40,6 +45,16 @@
             console.log('Clear called');
             document.querySelector('#notepad').innerHTML = ""
         }
+
+        hotkeys('ctrl+s', function() {
+            event.preventDefault();
+            fs.writeFile('/note', document.querySelector('#notepad').innerHTML, err => {
+            if (err) 
+                throw err;
+            else 
+                alert('Note has been saved');
+            });
+        });
 
         setInterval(() => { this.saveFile() }, 2000);
 
